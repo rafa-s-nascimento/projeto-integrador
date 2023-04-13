@@ -9,7 +9,7 @@ const {
 } = require("../controllers/gerenciarControllers");
 
 // rota protegida
-router.get("/", [authenticationMiddleware, gerenciar]);
+router.get("/", gerenciar);
 router.get("/minha-conta", [authenticationMiddleware, gerenciarPage]);
 
 module.exports = router;

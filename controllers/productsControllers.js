@@ -2,6 +2,7 @@ const path = require("path");
 const { produtos } = require("../data");
 
 // models
+const imagensProduto = require("../models/imagensProdutoModels");
 const productModel = require("../models/productModel");
 const valoresInput = require("../models/valoresInputModels");
 
@@ -56,19 +57,12 @@ const getSingleProduct = async (req, res) => {
     return res
         .status(201)
         .json({ msg: "not found", data: {}, user: { name: "", id: "" } });
-    // const singleProduct = produtos.find(
-    //     (item) => item.id === Number(req.params.id)
-    // );
-
-    // if (singleProduct) {
-    //     return res
-    //         .status(200)
-    //         .json({ data: singleProduct, user: { name: "", id: "" } });
-    // }
 };
 
 const getAddProductPage = (req, res) => {
-    res.status(200).json({ msg: "ok", success: true, data: {} });
+    const pathFile = path.join(__dirname, "../private/cadastrar-produto.html");
+
+    res.status(302).sendFile(pathFile);
 };
 
 // essa será a rota de confimação para adiconar um produto POST
@@ -77,6 +71,11 @@ const setProduct = async (req, res) => {
     const imgPath = req.imagePath; //o caminho vira num array de um ou mais itens
 
     const { nome, intencao, categoria, tipo, condicao, visivel } = inputs;
+    const { id: user_id } = req.user;
+
+    console.log(inputs);
+    console.log(req.user);
+    console.log(imgPath);
 
     if (nome == "") {
         return res
@@ -84,14 +83,10 @@ const setProduct = async (req, res) => {
             .json({ success: false, msg: "Falha ao cadastrar" });
     }
 
-    // com a imagem validada é preciso adicionar os inputs ao BD produto
-    // buscar para ver qual id foi atribuido a ele e adicionar as imagens com
-    // o id adicionado ao produto, uma vez que o id é uma chave estrangeira
-
     const inputValuesBD = await valoresInput.findAll({ raw: true });
 
     await productModel.create({
-        usuario_id: 1, //verificar o id do token no momento do POST
+        usuario_id: user_id,
         nome: nome,
         intencao_id: selectID(inputValuesBD, "valor", intencao),
         categoria_id: selectID(inputValuesBD, "valor", categoria),
@@ -100,11 +95,18 @@ const setProduct = async (req, res) => {
         visivel: visivel,
     });
 
-    // concertar o bug do usuario no local storage
-    // a cada requisição que o token estiver presente, retornar
-    // a requisição com o atributo usuario validado (true or false);
-    // sempre que uma página puxar for carregada, se validado for false
-    // é preciso remover o usuario do localStorage
+    const { id } = await productModel.findOne({
+        order: [["createdAt", "DESC"]],
+        limit: 1,
+        raw: true,
+    });
+
+    for (let i = 0; i < imgPath.length; i++) {
+        await imagensProduto.create({
+            produto_id: id,
+            img_path: imgPath[i],
+        });
+    }
 
     return res.status(201).json({ success: true, msg: "Produto cadastrado" });
 };

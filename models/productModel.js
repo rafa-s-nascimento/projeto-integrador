@@ -37,10 +37,10 @@ const Produto = sequelize.define(
             type: DataTypes.BOOLEAN,
         },
     },
-    { tableName: "produto", timestamps: false }
+    { tableName: "produto" }
 );
 
 // cria a tabela se ela não existe
-// Product.sync();
+// Produto.sync();
 
 module.exports = Produto;

@@ -13,13 +13,10 @@ const jwt = require("jsonwebtoken");
 // esse middle é responsável por retornar o html da página de login
 const login = async (req, res) => {
     const filePath = path.join(__dirname, "../public/login.html");
-    // console.log(filePath);
-    // console.log(__dirname + "/static/login.html");
-
     res.sendFile(filePath);
 };
 
-// esse middle é reponsável por validar um login
+// esse middle é reponsável por validar um login e atribuir um token
 const logar = async (req, res) => {
     const { email, password } = req.body;
 
@@ -57,7 +54,7 @@ const logar = async (req, res) => {
         expiresIn: "3d",
     });
 
-    res.cookie("Bearer " + token);
+    res.cookie("token", "Bearer " + token);
 
     res.status(200).json({
         msg: "acesso consedido",
@@ -75,10 +72,6 @@ const cadastro = async (req, res) => {
 // esse middle é responsável por fazer o cadastro
 const cadastrar = async (req, res) => {
     const { nome, email, password } = req.body;
-
-    console.log(nome, email, password);
-
-    // console.log(usuario);
 
     const singleUser = await usuarioModel.findOne({
         where: { email: email },
@@ -102,16 +95,6 @@ const cadastrar = async (req, res) => {
 
     await passwordModel.create({ usuario_id: id, senha: password });
 
-    // console.log(checkUsuario);
-
-    // if (checkUsuario) {
-    //     res.status(401).send("usuario já existe!!!");
-    //     return;
-
-    //     throw new CustomAPIError("user already exists!!!", 400);
-    // }
-
-    // setUsuario(usuario);
     return res.status(201).send("success");
 };
 

@@ -4,7 +4,6 @@ const router = express.Router();
 const {
     getProducts,
     getSingleProduct,
-    setProduct,
 } = require("../controllers/productsControllers");
 
 const {
@@ -12,24 +11,10 @@ const {
     setInfoProposta,
 } = require("../controllers/proposalControllers");
 
-const { uploadImage } = require("../controllers/uploadsControllers");
+const { authenticationMiddleware } = require("../middleware/auth");
 
-const {
-    checkAuthentication,
-    authenticationMiddleware,
-} = require("../middleware/auth");
-
-// rotas que buscam um produto ou mais
-// router.post(
-//     "/uploadImage",
-//     checkAuthentication,
-//     authenticationMiddleware,
-//     uploadImage,
-//     setProduct
-// );
 router.get("/:id", getSingleProduct);
 router.get("/", getProducts);
-router.post("/", setProduct);
 
 // rotas protegidas
 router.get("/proposta/:productID", getInfoProposta);

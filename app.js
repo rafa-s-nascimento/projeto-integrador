@@ -13,6 +13,7 @@ const login = require("./routes/loginRouter");
 const cadastro = require("./routes/cadastroRouter");
 const gerenciar = require("./routes/gerenciarRouter");
 const cadastroProduto = require("./routes/cadastroProdutoRouter");
+const minhaConta = require("./routes/minha-contaRouter");
 
 // responsável por decodificar o body de post enviados no formato json
 app.use(express.json());
@@ -37,6 +38,7 @@ app.use("/cadastro", cadastro);
 
 // responsável por direcionar requisições de gerenciamento
 app.use("/gerenciar", gerenciar);
+app.use("/minha-conta", minhaConta);
 
 app.use("/cadastrar-produto", cadastroProduto);
 
