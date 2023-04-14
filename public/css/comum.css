@@ -315,7 +315,7 @@ form div.single-input {
 
     /* topo */
     .container-input {
-        justify-content: space-between;
+        justify-content: flex-end;
     }
     .container-input div {
         order: -1;
@@ -369,6 +369,11 @@ form div.single-input {
     .logo {
         width: 176px;
         height: 50px;
+    }
+
+    .container-input {
+        justify-content: space-between;
+        margin-left: 4rem;
     }
 
     .container-input .div-input {
