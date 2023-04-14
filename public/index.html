@@ -64,7 +64,35 @@
             </div>
         </header>
         <main>
-            <div class="container container-section-items"></div>
+            <div class="container container-section-items">
+                <div class="produtos-container">
+                    <!-- placeholder article -->
+                    <article class="item" data-id="${produto.id}">
+                        <span class="objetivo-produto">trocar</span>
+                        <div class="container-img">
+                            <img
+                                src="./uploads/9939ddd1f6b07073b62745d7962e2d4b.jpg"
+                                alt="${produto.nome}"
+                            />
+                        </div>
+                        <p class="nome-produto">
+                            O senhor dos aneis - as duas torres e o retorno do
+                            rei
+                        </p>
+                        <div class="tag-produto">
+                            <p class="categoria-produto">#entretenimento</p>
+                            <p class="tipo-produto">#livro</p>
+                        </div>
+                        <a
+                            href="./detalhe-produto.html?id=${
+                                    produto.id
+                                }"
+                            class="link-produto"
+                            >Ver produto</a
+                        >
+                    </article>
+                </div>
+            </div>
         </main>
         <footer>
             <div class="info-contato">

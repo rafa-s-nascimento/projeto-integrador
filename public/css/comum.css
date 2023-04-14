@@ -36,7 +36,7 @@ h3 {
     font-size: 1.1rem;
 }
 p {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
 }
 a {
     text-decoration: none;
@@ -90,7 +90,7 @@ img {
 
 /* topo -- em comum em todas as abas */
 .logo {
-    width: 100px;
+    width: 150px;
     margin-right: 2rem;
 }
 .topo {
@@ -373,9 +373,6 @@ form div.single-input {
 
     .container-input .div-input {
         display: block;
-    }
-    main {
-        min-height: 500px;
     }
 
     .info-contato {

@@ -1,5 +1,4 @@
 const path = require("path");
-const { produtos } = require("../data");
 
 // models
 const imagensProduto = require("../models/imagensProdutoModels");
