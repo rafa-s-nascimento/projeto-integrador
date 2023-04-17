@@ -88,7 +88,7 @@ function exibirInfoUsuario() {
 }
 
 const testNome = (element) => {
-    const pattern = /^\w{3,30}$/g;
+    const pattern = /([a-zA-Z][\s-]?){2,29}/;
 
     const test = pattern.test(element.value);
 

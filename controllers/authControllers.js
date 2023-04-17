@@ -58,7 +58,6 @@ const logar = async (req, res) => {
 
     res.status(200).json({
         msg: "acesso consedido",
-        token: `Bearer ${token}`,
         user_data: { id, nome, img_path },
     });
 };
@@ -82,16 +81,13 @@ const cadastrar = async (req, res) => {
         return res.status(201).send("Usuario já cadastrado!");
     }
 
-    await usuarioModel.create({
+    const novoUsuario = await usuarioModel.create({
         nome: nome,
         email: email,
         img_id: Math.ceil(Math.random() * 15),
     });
 
-    const { id } = await usuarioModel.findOne({
-        where: { email: email },
-        raw: true,
-    });
+    const { id } = novoUsuario;
 
     await passwordModel.create({ usuario_id: id, senha: password });
 

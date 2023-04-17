@@ -48,14 +48,13 @@ const getSingleProduct = async (req, res) => {
     });
 
     if (singleProduct) {
-        return res
-            .status(200)
-            .json({ data: singleProduct, user: { name: "", id: "" } });
+        return res.status(200).json({
+            msg: "success",
+            data: singleProduct,
+        });
     }
 
-    return res
-        .status(201)
-        .json({ msg: "not found", data: {}, user: { name: "", id: "" } });
+    return res.status(201).json({ msg: "not found", data: {} });
 };
 
 const getAddProductPage = (req, res) => {
@@ -72,9 +71,9 @@ const setProduct = async (req, res) => {
     const { nome, intencao, categoria, tipo, condicao, visivel } = inputs;
     const { id: user_id } = req.user;
 
-    console.log(inputs);
-    console.log(req.user);
-    console.log(imgPath);
+    // console.log(inputs);
+    // console.log(req.user);
+    // console.log(imgPath);
 
     if (nome == "") {
         return res
@@ -84,7 +83,7 @@ const setProduct = async (req, res) => {
 
     const inputValuesBD = await valoresInput.findAll({ raw: true });
 
-    await productModel.create({
+    const produto = await productModel.create({
         usuario_id: user_id,
         nome: nome,
         intencao_id: selectID(inputValuesBD, "valor", intencao),
@@ -94,11 +93,7 @@ const setProduct = async (req, res) => {
         visivel: visivel,
     });
 
-    const { id } = await productModel.findOne({
-        order: [["createdAt", "DESC"]],
-        limit: 1,
-        raw: true,
-    });
+    const { id } = produto;
 
     for (let i = 0; i < imgPath.length; i++) {
         await imagensProduto.create({

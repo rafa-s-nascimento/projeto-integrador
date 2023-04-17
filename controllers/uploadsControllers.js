@@ -21,8 +21,6 @@ const uploadImage = async (req, res, next) => {
     const extensao = /\.\w+$/;
     let productImg = req.files.img;
 
-    console.log(productImg);
-
     const isArr = isArray(productImg);
 
     if (isArr) {

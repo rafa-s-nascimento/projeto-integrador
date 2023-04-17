@@ -38,82 +38,107 @@
             </div>
         </header>
         <main>
-            <div class="container">
+            <div class="container produtos-container">
                 <div class="container-item-produtos">
-                    <!-- Item principal -->
-                </div>
-                <div class="container-produtos-similares">
-                    <h3 class="titulo-produtos-similares titulo">
-                        produtos similares
-                    </h3>
-                    <div class="container-items">
-                        <div class="item" data-id="1">
-                            <div class="container-img">
-                                <img
-                                    src="./img/img4.png"
-                                    alt="caneca stormtrooper"
-                                />
-                            </div>
-                            <p class="nome-produto">caneca stormtrooper</p>
-                            <p class="preco-produto">R$ 24,27</p>
-                            <a href="#" class="link-produto">Ver produto</a>
-                        </div>
-                        <div class="item" data-id="1">
-                            <div class="container-img">
-                                <img
-                                    src="./img/img4.png"
-                                    alt="caneca stormtrooper"
-                                />
-                            </div>
-                            <p class="nome-produto">caneca stormtrooper</p>
-                            <p class="preco-produto">R$ 24,27</p>
-                            <a href="#" class="link-produto">Ver produto</a>
-                        </div>
-                        <div class="item" data-id="1">
-                            <div class="container-img">
-                                <img
-                                    src="./img/img4.png"
-                                    alt="caneca stormtrooper"
-                                />
-                            </div>
-                            <p class="nome-produto">caneca stormtrooper</p>
-                            <p class="preco-produto">R$ 24,27</p>
-                            <a href="#" class="link-produto">Ver produto</a>
-                        </div>
-                        <div class="item" data-id="1">
-                            <div class="container-img">
-                                <img
-                                    src="./img/img4.png"
-                                    alt="caneca stormtrooper"
-                                />
-                            </div>
-                            <p class="nome-produto">caneca stormtrooper</p>
-                            <p class="preco-produto">R$ 24,27</p>
-                            <a href="#" class="link-produto">Ver produto</a>
-                        </div>
-                        <div class="item" data-id="1">
-                            <div class="container-img">
-                                <img
-                                    src="./img/img4.png"
-                                    alt="caneca stormtrooper"
-                                />
-                            </div>
-                            <p class="nome-produto">caneca stormtrooper</p>
-                            <p class="preco-produto">R$ 24,27</p>
-                            <a href="#" class="link-produto">Ver produto</a>
-                        </div>
-                        <div class="item" data-id="1">
-                            <div class="container-img">
-                                <img
-                                    src="./img/img4.png"
-                                    alt="caneca stormtrooper"
-                                />
-                            </div>
-                            <p class="nome-produto">caneca stormtrooper</p>
-                            <p class="preco-produto">R$ 24,27</p>
-                            <a href="#" class="link-produto">Ver produto</a>
+                    <div class="container-img-miniatura">
+                        <div
+                            class="img-miniatura-container selecionado"
+                            data-id="1"
+                        >
+                            <img
+                                class="img img-miniatura"
+                                src="./img1.png"
+                                alt=""
+                                draggable="false"
+                            />
                         </div>
                     </div>
+                    <div class="container-img-principal">
+                        <button class="prev">
+                            <i class="fa-solid fa-caret-left"></i>
+                        </button>
+                        <button class="next">
+                            <i class="fa-solid fa-caret-right"></i>
+                        </button>
+                        <div class="slider">
+                            <img
+                                class="img img-principal"
+                                src="./img1.png"
+                                alt=""
+                            />
+                        </div>
+                    </div>
+                    <div class="container-info-produto">
+                        <h2 class="single-product-name product-info titulo">
+                            fita retrô original
+                        </h2>
+                        <span class="label">descrição:</span>
+                        <p class="single-product-descricao product-info">
+                            Lorem ipsum dolor sit amet consectetur adipisicing
+                            elit. Repudiandae, quos?
+                        </p>
+                        <span class="label">objetivo:</span>
+                        <p class="single-product-troca-ou-doacao product-info">
+                            trocar
+                        </p>
+                        <span class="label">tipo:</span>
+                        <p class="single-product-tipo product-info">material</p>
+                        <span class="label">categoria:</span>
+                        <p class="single-product-categoria product-info">
+                            entretenimento
+                        </p>
+                        <span class="label">condição:</span>
+                        <p class="single-product-condicao product-info">
+                            avariado
+                        </p>
+                        <button class="acordo-btn btn">Eu Quero!</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- modal proposta -->
+            <div class="modal">
+                <button class="close-btn fechar-proposta">
+                    <i class="fas fa-times"></i>
+                </button>
+
+                <div class="modal-content">
+                    <div class="produto-alvo campo-troca">
+                        <h3>O que eu quero</h3>
+                        <div
+                            class="container-produtos-alvo"
+                            data-tipo="alvo"
+                        ></div>
+                    </div>
+                    <div class="campo-de-confirmacao">
+                        <img
+                            src="./img/trocaTransparente.png"
+                            alt=""
+                            class="img"
+                        />
+                        <button class="enviar-proposta-btn btn">
+                            confirmar
+                        </button>
+                    </div>
+                    <div class="cesta-de-trocas campo-troca">
+                        <h3>O que eu ofereço</h3>
+                        <div
+                            class="container-produtos-adicionados"
+                            data-tipo="oferta"
+                        ></div>
+                    </div>
+
+                    <div class="produtos-disponiveis campo-troca">
+                        <h3>o que eu tenho</h3>
+                        <div
+                            class="container-produtos-disponiveis"
+                            data-tipo="possui"
+                        ></div>
+                    </div>
+                </div>
+
+                <div class="loading">
+                    <div class="sppiner"></div>
                 </div>
             </div>
         </main>
@@ -187,7 +212,7 @@
             </div>
         </footer>
 
-        <script type="module" src="./scripts/detalhe-produto.js"></script>
-        <!-- <script src="./scripts/produtos.js"></script> -->
+        <script type="module" src="./scripts/detalhe-produto-view.js"></script>
+        <script type="module" src="./scripts/sistema-trocas.js"></script>
     </body>
 </html>
