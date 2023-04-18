@@ -1,9 +1,9 @@
 const CustomAPIError = require("../errors/custom-error");
 const path = require("path");
 
-const usuarioModel = require("../models/usuarioModel");
-const passwordModel = require("../models/passwordModel");
-const avatarModel = require("../models/avatarModels");
+const UsuarioModel = require("../models/usuarioModel");
+const PasswordModel = require("../models/passwordModel");
+const AvatarModel = require("../models/avatarModels");
 
 // const { setUsuario, getUsuario, usuarios } = require("../data");
 
@@ -20,30 +20,26 @@ const login = async (req, res) => {
 const logar = async (req, res) => {
     const { email, password } = req.body;
 
-    const singleUser = await usuarioModel.findOne({
+    const singleUser = await UsuarioModel.findOne({
         where: { email: email },
-        raw: true,
+        include: [PasswordModel, AvatarModel],
     });
 
     if (!singleUser) {
         return res.status(401).send("Usuario ou senha incorretos");
     }
 
-    const { id, nome, img_id } = singleUser;
+    console.log(singleUser);
 
-    const { senha } = await passwordModel.findOne({
-        where: { usuario_id: id },
-        raw: true,
-    });
+    const { id, nome } = singleUser;
+
+    const { senha } = singleUser.usuario_password;
 
     if (senha !== password) {
         return res.status(401).send("Usuario ou senha incorretos");
     }
 
-    const { img_path } = await avatarModel.findOne({
-        where: { id: img_id },
-        raw: true,
-    });
+    const { img_path } = singleUser.avatar;
 
     // jwt.sing é responsável por criar o token para enviar ao usuario
     // ele recebe como parametros:
@@ -72,7 +68,7 @@ const cadastro = async (req, res) => {
 const cadastrar = async (req, res) => {
     const { nome, email, password } = req.body;
 
-    const singleUser = await usuarioModel.findOne({
+    const singleUser = await UsuarioModel.findOne({
         where: { email: email },
         raw: true,
     });
@@ -81,7 +77,7 @@ const cadastrar = async (req, res) => {
         return res.status(201).send("Usuario já cadastrado!");
     }
 
-    const novoUsuario = await usuarioModel.create({
+    const novoUsuario = await UsuarioModel.create({
         nome: nome,
         email: email,
         img_id: Math.ceil(Math.random() * 15),
@@ -89,7 +85,7 @@ const cadastrar = async (req, res) => {
 
     const { id } = novoUsuario;
 
-    await passwordModel.create({ usuario_id: id, senha: password });
+    await PasswordModel.create({ usuario_id: id, senha: password });
 
     return res.status(201).send("success");
 };

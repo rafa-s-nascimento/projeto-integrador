@@ -143,6 +143,18 @@ const testSenha2 = (element, similar) => {
     return test2;
 };
 
+const validarCookie = (cookieName) => {
+    const cookies = document.cookie.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+        if (cookies[i].trim().startsWith(cookieName)) {
+            return true;
+        }
+    }
+
+    return false;
+};
+
 export const ajustes = {
     gerarItens,
     formatarPreco,
@@ -152,4 +164,5 @@ export const ajustes = {
     testSenha1,
     testSenha2,
     exibirInfoUsuario,
+    validarCookie,
 };

@@ -1,3 +1,6 @@
+import { ajustes } from "./comum.js";
+const { validarCookie } = ajustes;
+
 const data = {
     usuario: {
         usuario_id: 45,
@@ -48,6 +51,13 @@ const url = window.location.search;
 let propostaAberta = null;
 
 acordoBtn.addEventListener("click", () => {
+    const valid = validarCookie("token");
+
+    if (!valid) {
+        window.location.href = "/login";
+        return;
+    }
+
     modal.classList.add("open");
 
     const searchParams = new URLSearchParams(url);

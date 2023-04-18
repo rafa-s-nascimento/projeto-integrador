@@ -1,7 +1,7 @@
 const { sequelize, DataTypes } = require("../db/connect");
 
 const Password = sequelize.define(
-    "password",
+    "usuario_password",
     {
         id: {
             type: DataTypes.INTEGER,

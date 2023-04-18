@@ -1,13 +1,32 @@
 const path = require("path");
 
 // models
-const imagensProduto = require("../models/imagensProdutoModels");
-const productModel = require("../models/productModel");
-const valoresInput = require("../models/valoresInputModels");
+const ImagensProduto = require("../models/imagensProdutoModels");
+const ProductModel = require("../models/productModel");
+const ValoresInput = require("../models/valoresInputModels");
+const Usuario = require("../models/usuarioModel");
+const Password = require("../models/passwordModel");
+const Avatar = require("../models/avatarModels");
 
 const selectID = (arr, atributo, valor) => {
     return arr.find((obj) => obj[atributo] == valor)["id"];
 };
+
+const testarRelacionamentos = async () => {
+    // busca por associação.
+
+    // lazy loading
+    const usuario = await Usuario.findByPk(1);
+    const password = await usuario.getUsuario_password();
+
+    // Eager loading
+    const usuario2 = await Usuario.findByPk(1, { include: [Password, Avatar] });
+    const password2 = usuario2.usuario_password.senha;
+
+    console.log(usuario2);
+};
+
+// testarRelacionamentos();
 
 // retorna todos os produtos
 const getProducts = async (req, res) => {
@@ -24,7 +43,7 @@ const getProducts = async (req, res) => {
 
     // res.status(200).json({ data: {} });
 
-    res.send("okok");
+    res.status(200).json({ data: {} });
 };
 
 // retorna um produto em específico
@@ -42,7 +61,7 @@ const getSingleProduct = async (req, res) => {
     // o atributo raw é importante para que assim possa ser retornado um array simples de objetos.
     // nesse caso atributo where faz com que seja buscado o id que é passado como parametro na hora da requisição
     // 'select * from product where id = <id passado como parametro>
-    const singleProduct = await productModel.findOne({
+    const singleProduct = await ProductModel.findOne({
         where: { id: id },
         raw: true,
     });
@@ -81,9 +100,9 @@ const setProduct = async (req, res) => {
             .json({ success: false, msg: "Falha ao cadastrar" });
     }
 
-    const inputValuesBD = await valoresInput.findAll({ raw: true });
+    const inputValuesBD = await ValoresInput.findAll({ raw: true });
 
-    const produto = await productModel.create({
+    const produto = await ProductModel.create({
         usuario_id: user_id,
         nome: nome,
         intencao_id: selectID(inputValuesBD, "valor", intencao),
@@ -96,7 +115,7 @@ const setProduct = async (req, res) => {
     const { id } = produto;
 
     for (let i = 0; i < imgPath.length; i++) {
-        await imagensProduto.create({
+        await ImagensProduto.create({
             produto_id: id,
             img_path: imgPath[i],
         });

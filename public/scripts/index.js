@@ -1,55 +1,55 @@
-import { requisicoes } from "./requisicao.js";
 import { ajustes } from "./comum.js";
 
-const containerSection = document.querySelector(".container-section-items");
+window.addEventListener("DOMContentLoaded", async () => {
+    const produtosContainer = document.querySelector(".produtos-container");
 
-const token = sessionStorage.getItem("token");
+    try {
+        const response = await fetch("http://localhost:5000/products?limit=20");
 
-window.addEventListener("DOMContentLoaded", () => {
-    const get = async () => {
-        const promisse = await fetch("http://localhost:5000/products", {
-            headers: {
-                authorization: token,
-            },
-        });
+        if (response.ok) {
+            const data = await response.json();
 
-        ajustes.exibirInfoUsuario();
+            renderizarItems(data, produtosContainer);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+});
 
-        const { data, user } = await promisse.json();
+ajustes.exibirInfoUsuario();
 
-        // requisicoes.requisicaoGet.then((data) => {
+const renderizarItems = (data, parentElement) => {
+    if (data.length < 1) {
+        return (parentElement.innerHTML = `<h2>Nenhum produto encontrado...</h2>`);
+    } else {
+        const produtosHTML = data
+            .map(
+                ({ id, objetivo, img, nome, categoria, tipo }) => `
 
-        const categorias = data.reduce(function (ac, item) {
-            if (!ac.includes(item.categoria)) {
-                ac.push(item.categoria);
-            }
-            return ac;
-        }, []);
-
-        containerSection.innerHTML = categorias
-            .map((categoria) => {
-                let innerHTML = `
-                    <section>
-                        <div class="titulo-section-items">
-                            <h3 id="${categoria}" class="titulo">${categoria}</h3>
-                            <a href="produtos.html">
-                                Ver tudo
-                                <i class="fa-solid fa-arrow-right-long"></i>
-                            </a>
+            <article class="item" data-id="${id}">
+                        <span class="objetivo-produto">${objetivo}</span>
+                        <div class="container-img">
+                            <img
+                                src="${img}"
+                                alt="${nome}"
+                            />
                         </div>
-                        <div class="container-item">
-                            ${ajustes.gerarItens(
-                                ajustes.filtraItensPorCategoria(data, categoria)
-                            )}
+                        <p class="nome-produto">
+                           ${nome}
+                        </p>
+                        <div class="tag-produto">
+                            <p class="categoria-produto">#${categoria}</p>
+                            <p class="tipo-produto">#${tipo}</p>
                         </div>
-                    </section>`;
-
-                return innerHTML;
-            })
+                        <a
+                            href="./detalhe-produto.html?id=${id}"
+                            class="link-produto"
+                            >Ver produto</a
+                        >
+            </article>`
+            )
             .join("");
 
-        // });
-    };
-
-    get();
-});
+        parentElement.innerHTML = produtosHTML;
+    }
+};
