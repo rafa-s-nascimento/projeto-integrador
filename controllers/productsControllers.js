@@ -11,6 +11,9 @@ const Avatar = require("../models/avatarModels");
 const selectID = (arr, atributo, valor) => {
     return arr.find((obj) => obj[atributo] == valor)["id"];
 };
+const selectImg = (arr_colection) => {
+    return arr_colection.map((img) => img.img_path);
+};
 
 const testarRelacionamentos = async () => {
     // busca por associação.
@@ -32,18 +35,36 @@ const testarRelacionamentos = async () => {
 const getProducts = async (req, res) => {
     const params = req.params;
     const url = req.url;
-    const search = req.query;
-    // console.log(req.headers);
+    const limit = Number(req.query.limit);
 
     // o productModel.findAll pega a model de determinada tabela e faz um "SELECT * FROM product"
     // ele pode receber um objeto com alguns parametros para modificar o select
     // o atributo raw é importante para que assim possa ser retornado um array simples de objetos.
 
-    // const selectProducts = await productModel.findAll({ raw: true });
+    const selectProducts = await ProductModel.findAll({
+        include: [
+            { model: ValoresInput, as: "intencaoId" },
+            { model: ValoresInput, as: "categoriaId" },
+            { model: ValoresInput, as: "tipoId" },
+            { model: ValoresInput, as: "condicaoId" },
+            { model: ImagensProduto, as: "produtoImg" },
+        ],
+        limit: limit,
+    });
 
-    // res.status(200).json({ data: {} });
+    const result = selectProducts.map((produto) => {
+        return {
+            id: produto.id,
+            nome: produto.nome,
+            intencao: produto.intencaoId.valor,
+            categoria: produto.categoriaId.valor,
+            tipo: produto.tipoId.valor,
+            condicao: produto.condicaoId.valor,
+            img: selectImg(produto.produtoImg),
+        };
+    });
 
-    res.status(200).json({ data: {} });
+    res.status(200).json({ data: result });
 };
 
 // retorna um produto em específico

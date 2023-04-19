@@ -25,10 +25,12 @@ const ImagensProduto = sequelize.define(
 
 Produto.hasMany(ImagensProduto, {
     foreignKey: "produto_id",
+    as: "produtoImg",
 });
 ImagensProduto.belongsTo(Produto, {
     constraint: true,
     foreignKey: "produto_id",
+    as: "produtoImg",
     foreignKeyConstraint: { name: "imagens_produto_ibf_1" },
 });
 

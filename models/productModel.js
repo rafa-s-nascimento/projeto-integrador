@@ -57,25 +57,28 @@ Produto.belongsTo(Usuario, {
     foreignKeyConstraint: { name: "produto_usuario" },
 });
 
-// indica as restrições a tabela de valores input.
 Produto.belongsTo(ValoresInput, {
     constraint: true,
     foreignKey: "intencao_id",
+    as: "intencaoId",
     foreignKeyConstraint: { name: "produto_ibfk_1" },
 });
 Produto.belongsTo(ValoresInput, {
     constraint: true,
     foreignKey: "categoria_id",
+    as: "categoriaId",
     foreignKeyConstraint: { name: "produto_ibfk_2" },
 });
 Produto.belongsTo(ValoresInput, {
     constraint: true,
     foreignKey: "tipo_id",
+    as: "tipoId",
     foreignKeyConstraint: { name: "produto_ibfk_3" },
 });
 Produto.belongsTo(ValoresInput, {
     constraint: true,
     foreignKey: "condicao_id",
+    as: "condicaoId",
     foreignKeyConstraint: { name: "produto_ibfk_4" },
 });
 

@@ -6,8 +6,8 @@ window.addEventListener("DOMContentLoaded", async () => {
     try {
         const response = await fetch("http://localhost:5000/products?limit=20");
 
-        if (response.ok) {
-            const data = await response.json();
+        if (response.status === 200) {
+            const { data } = await response.json();
 
             renderizarItems(data, produtosContainer);
         }
@@ -24,13 +24,13 @@ const renderizarItems = (data, parentElement) => {
     } else {
         const produtosHTML = data
             .map(
-                ({ id, objetivo, img, nome, categoria, tipo }) => `
+                ({ id, intencao, img, nome, categoria, tipo }) => `
 
             <article class="item" data-id="${id}">
-                        <span class="objetivo-produto">${objetivo}</span>
+                        <span class="objetivo-produto">${intencao}</span>
                         <div class="container-img">
                             <img
-                                src="${img}"
+                                src="${img[0]}"
                                 alt="${nome}"
                             />
                         </div>
