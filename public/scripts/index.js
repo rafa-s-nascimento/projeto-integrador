@@ -30,7 +30,7 @@ const renderizarItems = (data, parentElement) => {
                         <span class="objetivo-produto">${intencao}</span>
                         <div class="container-img">
                             <img
-                                src="${img[0]}"
+                                src="${img[0].src}"
                                 alt="${nome}"
                             />
                         </div>
@@ -44,6 +44,7 @@ const renderizarItems = (data, parentElement) => {
                         <a
                             href="./detalhe-produto.html?id=${id}"
                             class="link-produto"
+                            target="_blank"
                             >Ver produto</a
                         >
             </article>`

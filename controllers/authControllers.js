@@ -29,8 +29,6 @@ const logar = async (req, res) => {
         return res.status(401).send("Usuario ou senha incorretos");
     }
 
-    console.log(singleUser);
-
     const { id, nome } = singleUser;
 
     const { senha } = singleUser.usuario_password;
@@ -51,10 +49,10 @@ const logar = async (req, res) => {
     });
 
     res.cookie("token", "Bearer " + token);
+    res.cookie("userInfo", `id=${id},nome=${nome},img=${img_path}`);
 
     res.status(200).json({
         msg: "acesso consedido",
-        user_data: { id, nome, img_path },
     });
 };
 

@@ -1,53 +1,52 @@
 import { ajustes } from "./comum.js";
 const { validarCookie } = ajustes;
 
-const data = {
-    usuario: {
-        usuario_id: 45,
-        usuario_nome: "Sabrino",
-        usuario_img: "./img/columbian-roast.jpeg",
-    },
-    produtos: [
-        // {id: 126, nome: 'cadeira', descricao: 'cadeira de madeira', img: './img/folder-img.jpeg'},
-        {
-            id: 198,
-            nome: "ariedac",
-            descricao: "madeira de cadeira",
-            img: "./img/small.jpeg",
-        },
-        {
-            id: 37,
-            nome: "edacari",
-            descricao: "madeira de madeira",
-            img: "./img/big.jpeg",
-        },
-    ],
-};
+// const data = {
+//     usuario: {
+//         usuario_id: 45,
+//         usuario_nome: "Sabrino",
+//         usuario_img: "./img/columbian-roast.jpeg",
+//     },
+//     produtos: [
+//         // {id: 126, nome: 'cadeira', descricao: 'cadeira de madeira', img: './img/folder-img.jpeg'},
+//         {
+//             id: 198,
+//             nome: "ariedac",
+//             descricao: "madeira de cadeira",
+//             img: "./img/small.jpeg",
+//         },
+//         {
+//             id: 37,
+//             nome: "edacari",
+//             descricao: "madeira de madeira",
+//             img: "./img/big.jpeg",
+//         },
+//     ],
+// };
 
-const dataExample = {
-    usuario: {
-        usuario_id: 1456,
-        usuario_nome: "Carolino",
-        usuario_img: "./img/house-blend.jpeg",
-    },
-    produtos: [
-        {
-            id: 9864,
-            nome: "Fita Original",
-            descricao: "Fita original toda bagaçada",
-            img: "./img/big.jpeg",
-        },
-    ],
-};
+// const dataExample = {
+//     usuario: {
+//         usuario_id: 1456,
+//         usuario_nome: "Carolino",
+//         usuario_img: "./img/house-blend.jpeg",
+//     },
+//     produtos: [
+//         {
+//             id: 9864,
+//             nome: "Fita Original",
+//             descricao: "Fita original toda bagaçada",
+//             img: "./img/big.jpeg",
+//         },
+//     ],
+// };
 
-const dataJson = JSON.stringify(data);
-
-console.log(dataJson);
+// console.log(dataJson);
 
 const acordoBtn = document.querySelector(".acordo-btn");
 const modal = document.querySelector(".modal");
 
 const url = window.location.search;
+
 let propostaAberta = null;
 
 acordoBtn.addEventListener("click", () => {
@@ -66,7 +65,7 @@ acordoBtn.addEventListener("click", () => {
     const produto_id = searchParams.get("id");
 
     propostaAberta = new Proposta(produto_id);
-    propostaAberta.abrindoProposta();
+    propostaAberta.abrindo_proposta();
 });
 
 class Proposta {
@@ -77,27 +76,29 @@ class Proposta {
         this.produtos_usuario_interessado = null;
         this.id_usuario_interessado;
 
-        this.fecharProposta = document.querySelector(".fechar-proposta");
-        this.fecharProposta.addEventListener(
+        this.fechar_proposta = document.querySelector(".fechar-proposta");
+        this.fechar_proposta.addEventListener(
             "click",
-            this.fechandoPropostaDeTroca
+            this.fechando_proposta_de_troca
         );
 
         this.confirmar = document.querySelector(".enviar-proposta-btn");
-        this.confirmar.addEventListener("click", this.enviarProposta);
+        this.confirmar.addEventListener("click", this.enviar_proposta);
 
-        this.containerAlvo = document.querySelector(".container-produtos-alvo");
-        this.containerOfereco = document.querySelector(
+        this.container_alvo = document.querySelector(
+            ".container-produtos-alvo"
+        );
+        this.container_ofereco = document.querySelector(
             ".container-produtos-adicionados"
         );
-        this.containerPossuo = document.querySelector(
+        this.container_possuo = document.querySelector(
             ".container-produtos-disponiveis"
         );
-        this.alternarTrocas = null;
+        this.alterar_trocas = null;
     }
 
     // esse método é responsável por pegar os dados para começar a proposta de troca
-    abrindoProposta = async () => {
+    abrindo_proposta = async () => {
         console.log("abrindo proposta");
 
         // adicionar o spinner
@@ -124,10 +125,13 @@ class Proposta {
 
                 this.produtos_usuario_interessado = interessado.produto;
 
-                this._renderizarItens(proprietario.produto, this.containerAlvo);
+                this._renderizarItens(
+                    proprietario.produto,
+                    this.container_alvo
+                );
                 this._renderizarItens(
                     this.produtos_usuario_interessado,
-                    this.containerPossuo,
+                    this.container_possuo,
                     true
                 );
             }
@@ -137,7 +141,7 @@ class Proposta {
     };
 
     // esse método valida e adiciona o produto a cesta de trocas
-    adicionandoProdutoParaTroca = (id) => {
+    adicionar_produto_para_troca = (id) => {
         console.log(this.cesta_de_trocas);
         console.log(this.produtos_usuario_interessado);
         console.log(id);
@@ -162,18 +166,18 @@ class Proposta {
 
         this._renderizarItens(
             this.cesta_de_trocas,
-            this.containerOfereco,
+            this.container_ofereco,
             true
         );
         this._renderizarItens(
             this.produtos_usuario_interessado,
-            this.containerPossuo,
+            this.container_possuo,
             true
         );
     };
 
     // esse método valida e retira um produto da troca
-    removendoProdutoDaTroca = (id) => {
+    remover_produto_da_troca = (id) => {
         if (
             this.produtos_usuario_interessado.some(
                 (product) => product.id == id
@@ -195,18 +199,18 @@ class Proposta {
 
         this._renderizarItens(
             this.cesta_de_trocas,
-            this.containerOfereco,
+            this.container_ofereco,
             true
         );
         this._renderizarItens(
             this.produtos_usuario_interessado,
-            this.containerPossuo,
+            this.container_possuo,
             true
         );
     };
 
     // esse método e responsável por enviar a proposta para o servidor
-    enviarProposta = () => {
+    enviar_proposta = () => {
         if (this.cesta_de_trocas.length < 1) {
             alert("insira pelo menos um produto para troca.");
             return;
@@ -214,23 +218,23 @@ class Proposta {
 
         // fazer um put para o servidor com os dados da troca
         console.log("enviando proposta de troca");
-        this.fechandoPropostaDeTroca();
+        this.fechando_proposta_de_troca();
     };
 
     // esse método encerra a proposta sem enviar, resetando os dados.
-    fechandoPropostaDeTroca = () => {
+    fechando_proposta_de_troca = () => {
         console.log("fechando proposta");
         modal.classList.remove("open");
 
-        this.confirmar.removeEventListener("click", this.enviarProposta);
-        this.fecharProposta.removeEventListener(
+        this.confirmar.removeEventListener("click", this.enviar_proposta);
+        this.fechar_proposta.removeEventListener(
             "click",
-            this.fechandoPropostaDeTroca
+            this.fechando_proposta_de_troca
         );
 
-        this.containerAlvo.innerHTML = "";
-        this.containerOfereco.innerHTML = "";
-        this.containerPossuo.innerHTML = "";
+        this.container_alvo.innerHTML = "";
+        this.container_ofereco.innerHTML = "";
+        this.container_possuo.innerHTML = "";
 
         propostaAberta = null;
     };
@@ -312,18 +316,18 @@ class Proposta {
             return;
         });
 
-        this.alternarTrocas = [
+        this.alterar_trocas = [
             ...document.querySelectorAll(".single-product-miniatura-alterar"),
         ];
 
-        this.alternarTrocas.forEach((node) =>
+        this.alterar_trocas.forEach((node) =>
             node.addEventListener("click", (e) => {
                 const text = e.currentTarget.textContent;
                 const id =
                     e.currentTarget.parentElement.parentElement.dataset.id;
                 text == "adicionar"
-                    ? this.adicionandoProdutoParaTroca(id)
-                    : this.removendoProdutoDaTroca(id);
+                    ? this.adicionar_produto_para_troca(id)
+                    : this.remover_produto_da_troca(id);
             })
         );
     };

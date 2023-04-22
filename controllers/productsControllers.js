@@ -12,7 +12,11 @@ const selectID = (arr, atributo, valor) => {
     return arr.find((obj) => obj[atributo] == valor)["id"];
 };
 const selectImg = (arr_colection) => {
-    return arr_colection.map((img) => img.img_path);
+    return arr_colection.map((img) => {
+        return {
+            src: img.img_path,
+        };
+    });
 };
 
 const testarRelacionamentos = async () => {
@@ -33,9 +37,16 @@ const testarRelacionamentos = async () => {
 
 // retorna todos os produtos
 const getProducts = async (req, res) => {
-    const params = req.params;
+    let params = null;
+    let limit = null;
     const url = req.url;
-    const limit = Number(req.query.limit);
+
+    if (req.params) {
+        params = req.params;
+    }
+    if (req.query.limit) {
+        limit = Number(req.query.limit);
+    }
 
     // o productModel.findAll pega a model de determinada tabela e faz um "SELECT * FROM product"
     // ele pode receber um objeto com alguns parametros para modificar o select
@@ -50,6 +61,7 @@ const getProducts = async (req, res) => {
             { model: ImagensProduto, as: "produtoImg" },
         ],
         limit: limit,
+        where: { visivel: 1 },
     });
 
     const result = selectProducts.map((produto) => {
@@ -60,6 +72,7 @@ const getProducts = async (req, res) => {
             categoria: produto.categoriaId.valor,
             tipo: produto.tipoId.valor,
             condicao: produto.condicaoId.valor,
+            descricao: produto.descricao,
             img: selectImg(produto.produtoImg),
         };
     });
@@ -83,18 +96,35 @@ const getSingleProduct = async (req, res) => {
     // nesse caso atributo where faz com que seja buscado o id que é passado como parametro na hora da requisição
     // 'select * from product where id = <id passado como parametro>
     const singleProduct = await ProductModel.findOne({
-        where: { id: id },
-        raw: true,
+        where: { id: Number(id) },
+        include: [
+            { model: ValoresInput, as: "intencaoId" },
+            { model: ValoresInput, as: "categoriaId" },
+            { model: ValoresInput, as: "tipoId" },
+            { model: ValoresInput, as: "condicaoId" },
+            { model: ImagensProduto, as: "produtoImg" },
+        ],
     });
 
-    if (singleProduct) {
-        return res.status(200).json({
-            msg: "success",
-            data: singleProduct,
-        });
+    if (!singleProduct) {
+        return res.status(200).json({ msg: "not found" });
     }
 
-    return res.status(201).json({ msg: "not found", data: {} });
+    const produto = {
+        id: singleProduct.id,
+        nome: singleProduct.nome,
+        intencao: singleProduct.intencaoId.valor,
+        categoria: singleProduct.categoriaId.valor,
+        tipo: singleProduct.tipoId.valor,
+        condicao: singleProduct.condicaoId.valor,
+        descricao: singleProduct.descricao,
+        img: selectImg(singleProduct.produtoImg),
+    };
+
+    return res.status(200).json({
+        msg: "success",
+        data: produto,
+    });
 };
 
 const getAddProductPage = (req, res) => {
@@ -108,7 +138,10 @@ const setProduct = async (req, res) => {
     const inputs = req.body;
     const imgPath = req.imagePath; //o caminho vira num array de um ou mais itens
 
-    const { nome, intencao, categoria, tipo, condicao, visivel } = inputs;
+    console.log(inputs);
+
+    const { nome, intencao, categoria, tipo, condicao, visivel, descricao } =
+        inputs;
     const { id: user_id } = req.user;
 
     // console.log(inputs);
@@ -130,6 +163,7 @@ const setProduct = async (req, res) => {
         categoria_id: selectID(inputValuesBD, "valor", categoria),
         tipo_id: selectID(inputValuesBD, "valor", tipo),
         condicao_id: selectID(inputValuesBD, "valor", condicao),
+        descricao: descricao,
         visivel: visivel,
     });
 

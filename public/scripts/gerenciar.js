@@ -9,6 +9,8 @@ window.addEventListener("DOMContentLoaded", function () {
 
         document.cookie =
             "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie =
+            "userInfo=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
         sessionStorage.removeItem("user_data");
         window.location = "/login";

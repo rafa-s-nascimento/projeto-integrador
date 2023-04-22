@@ -44,23 +44,6 @@ function filtraItensPorCategoria(dados, categoria) {
 }
 
 function redirecionarAdm() {
-    const token = sessionStorage.getItem("token");
-
-    // const get = async () => {
-    //     const promisse = await fetch("http://localhost:5000/gerenciar", {
-    //         headers: {
-    //             authorization: token,
-    //         },
-    //     })
-    //         .then(async (res) => {
-    //             const path = await res.json();
-    //             window.location = path;
-    //         })
-    //         .catch((err) => console.log(err));
-    // };
-
-    // get();
-
     window.location = "./gerenciar.html";
 }
 
@@ -70,9 +53,23 @@ function exibirInfoUsuario() {
     const perfilAvatar = document.querySelector(".perfil-avatar");
     const perfilNome = document.querySelector(".perfil-nome");
 
-    const user_data = JSON.parse(sessionStorage.getItem("user_data"));
+    const cookieInfo = document.cookie.split(";");
+    let split = "";
+    cookieInfo.forEach((cookie) => {
+        let temp = cookie.trim();
 
-    if (user_data) {
+        if (temp.startsWith("userInfo")) {
+            split = cookie.split("%2C");
+            split = split.map((value) => value.split("%3D"));
+        }
+    });
+
+    if (split) {
+        console.log("doqwdokqwdkqwokd");
+        const id = split[0][1];
+        const nome = split[1][1];
+        const img = split[2][1].replace(/%2F/g, "/");
+
         perfilData.removeEventListener("click", redirecionarAdm);
 
         perfilData.classList.add("show");
@@ -80,11 +77,13 @@ function exibirInfoUsuario() {
 
         perfilData.addEventListener("click", redirecionarAdm);
 
-        perfilAvatar.src = user_data.img_path;
-        perfilNome.textContent = user_data.nome;
-    } else {
-        loginBtn.classList.add("show");
+        perfilAvatar.src = img;
+        perfilNome.textContent = nome;
+
+        return;
     }
+
+    loginBtn.classList.add("show");
 }
 
 const testNome = (element) => {

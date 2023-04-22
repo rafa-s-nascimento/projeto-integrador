@@ -1,74 +1,106 @@
-const data = [
-    { src: "./img1.png" },
-    { src: "./9939ddd1f6b07073b62745d7962e2d4b.jpg" },
-    // { src: "./1681647511841.jpg" },
-    // { src: "./img1.png" },
-    // { src: "./9939ddd1f6b07073b62745d7962e2d4b.jpg" },
-    // { src: "./1681647511841.jpg" },
-    // { src: "./img1.png" },
-    // { src: "./9939ddd1f6b07073b62745d7962e2d4b.jpg" },
-    // { src: "./1681647511841.jpg" },
-];
+const urlSearch = window.location.search;
 
 const containerImgs = document.querySelector(".container-img-miniatura");
 const slider = document.querySelector(".slider");
+const $nome = document.querySelector(".single-product-name");
+const $descricao = document.querySelector(".single-product-descricao");
+const $intencao = document.querySelector(".single-product-troca-ou-doacao");
+const $tipo = document.querySelector(".single-product-tipo");
+const $categoria = document.querySelector(".single-product-categoria");
+const $condicao = document.querySelector(".single-product-condicao");
 
-containerImgs.innerHTML = data
-    .map(({ src }, id) => {
-        return `<div class="img-miniatura-container" data-id="${id}">
+window.addEventListener("DOMContentLoaded", async () => {
+    const id = urlSearch.replace("?id=", "");
+
+    try {
+        const response = await fetch(`http://localhost:5000/products/${id}`);
+
+        if (!response.status == 200) {
+            throw new Error("falha ao requisitar produto");
+        }
+        const { data } = await response.json();
+
+        if (!data) {
+            throw new Error("not found");
+        }
+
+        const { nome, intencao, categoria, tipo, condicao, descricao } = data;
+        const { img } = data;
+
+        console.log(nome);
+        $nome.textContent = nome;
+        $descricao.textContent = descricao;
+        $intencao.textContent = intencao;
+        $tipo.textContent = tipo;
+        $condicao.textContent = condicao;
+
+        containerImgs.innerHTML = img
+            .map(({ src }, id) => {
+                return `<div class="img-miniatura-container" data-id="${id}">
                 <img class="img img-miniatura"
                     src="${src}"
                     alt=""
                     draggable="false"
                 />
             </div>`;
-    })
-    .join("");
+            })
+            .reverse()
+            .join("");
 
-slider.innerHTML = data
-    .map(({ src }) => {
-        return `<img
+        slider.innerHTML = img
+            .map(({ src }) => {
+                return `<img
                                 class="img img-principal"
                                 src=${src}
                                 alt=""
                             />`;
-    })
-    .join("");
+            })
+            .join("");
 
-const mainImgs = document.querySelectorAll(".img-principal");
+        const mainImgs = [
+            ...document.querySelectorAll(".img-principal"),
+        ].reverse();
 
-const prev = document.querySelector(".prev");
-const next = document.querySelector(".next");
+        const prev = document.querySelector(".prev");
+        const next = document.querySelector(".next");
 
-mainImgs.forEach((img, index) => {
-    img.style.left = `${index * 100}%`;
-});
+        mainImgs.forEach((img, index) => {
+            img.style.left = `${index * 100}%`;
+        });
 
-let count = 0;
+        let count = 0;
 
-next.addEventListener("click", () => {
-    count++;
-    carousel();
-});
-prev.addEventListener("click", () => {
-    count--;
-    carousel();
-});
+        next.addEventListener("click", () => {
+            count++;
+            carousel();
+        });
+        prev.addEventListener("click", () => {
+            count--;
+            carousel();
+        });
 
-const carousel = () => {
-    if (count == mainImgs.length) {
-        count = 0;
+        const carousel = () => {
+            if (count == mainImgs.length) {
+                count = 0;
+            }
+            if (count < 0) {
+                count = mainImgs.length - 1;
+            }
+
+            console.log(count);
+
+            mainImgs.forEach((img) => {
+                img.style.transform = `translateX(-${count * 100}%)`;
+            });
+        };
+    } catch (error) {
+        const main = (document.querySelector(
+            ".produtos-container"
+        ).innerHTML = `<h2>${error}</h2>`);
+
+        console.log(error);
     }
-    if (count < 0) {
-        count = mainImgs.length - 1;
-    }
-
-    console.log(count);
-
-    mainImgs.forEach((img) => {
-        img.style.transform = `translateX(-${count * 100}%)`;
-    });
-};
+});
 
 // containerImgs.addEventListener("mousedown", (e) => {
 //     posicaoInicio = e.screenY;

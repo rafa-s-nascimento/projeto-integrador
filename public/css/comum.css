@@ -312,7 +312,9 @@ form div.single-input {
     p {
         font-size: 1.15rem;
     }
-
+    main {
+        min-height: 85vh;
+    }
     /* topo */
     .container-input {
         justify-content: flex-end;

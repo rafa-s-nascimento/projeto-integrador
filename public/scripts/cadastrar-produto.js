@@ -12,6 +12,7 @@ window.addEventListener("load", async function () {
         const condicao = document.querySelector(".condicao-input");
         const visivel = document.querySelector(".visivel-input");
         const img = document.querySelector(".img-input").files;
+        const descricao = this.document.querySelector(".descricao-input");
 
         const form = new FormData();
 
@@ -24,9 +25,14 @@ window.addEventListener("load", async function () {
         form.append("categoria", categoria.value);
         form.append("tipo", tipo.value);
         form.append("condicao", condicao.value);
+        form.append("descricao", descricao.value);
         form.append("visivel", visivel.checked);
 
-        if (img.length > 0 && nome.value !== "") {
+        if (
+            img.length > 0 &&
+            nome.value.length !== 0 &&
+            descricao.value !== 0
+        ) {
             const enviar = async () => {
                 fetch("http://localhost:5000/cadastrar-produto", {
                     method: "POST",
